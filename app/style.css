@@ -1,0 +1,68 @@
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 100;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 200;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 800;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 900;
+}
+@font-face {
+  font-family: "FtMonopol";
+  src: url("./fonts/FtMonopol-2.08-VF.ttf");
+  font-weight: 1000;
+}
+
+body {
+  margin: 0;
+  /* direction: rtl; */
+  /* color: $text;
+    background-color: $bg; */
+  font-family: "FtMonopol", Arial, Helvetica, sans-serif;
+  /* font-size: 0.85em; */
+
+  /* @include media('>=tablet') {
+      font-size: 1em;
+    } */
+}
+
+canvas#my_canvas {
+  max-width: 100%;
+  height: auto;
+}

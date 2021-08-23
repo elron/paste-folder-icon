@@ -1,14 +1,23 @@
 {
   "name": "paste-folder-icon",
+  "productName": "Paste Folder Icon",
   "version": "1.0.0",
   "description": "",
   "main": "index.jsx",
+  "type": "module",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "icon": "node icon.js",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --out=rlease-builds --version-string.CompanyName=CE --version-string.FireDescription=CE "
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "electron": "13.2.1"
+  },
+  "dependencies": {
+    "@fiahfy/ico": "^0.0.5",
+    "electron-packager": "^15.3.0",
+    "jimp": "^0.16.1"
   }
 }

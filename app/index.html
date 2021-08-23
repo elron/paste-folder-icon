@@ -6,11 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Paste Folder Icon</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
-    <script src="./script.js"></script>
+    <script src="./script.js" defer></script>
+    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
     <h1>Paste your folder icon now!</h1>
     <p>(Ctrl+V to paste)</p>
-    <img src="" alt="" id="image">
+
+    <form id="myForm">
+      <div id="instructions">
+        Method 1:<br />
+        1. Copy image data into clipboard, or press Print Screen <br />
+        2. Press Ctrl+V (page/iframe must be focused): <br /><br />
+        Method 2:<br />
+        1. Drag and drop an image onto the canvas
+      </div>
+      <br /><br />
+      <canvas
+        style="border: 1px solid grey"
+        id="my_canvas"
+        width="300"
+        height="300"
+      ></canvas>
+      <div class="form-group-sm">
+        <button
+          id="saveButton"
+          type="button"
+          value="Save"
+          class="btn btn-lg btn-primary"
+        >
+          Save
+        </button>
+      </div>
+      <input type="hidden" id="imageData" />
+    </form>
   </body>
 </html>

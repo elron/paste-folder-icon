@@ -1,80 +1,119 @@
-// document.onpaste = (evt) => {
-//   const dT = evt.clipboardData || window.clipboardData;
-//   const file = dT.files[0];
-//   console.log(file);
-// };
+var CLIPBOARD = new CLIPBOARD_CLASS("my_canvas", true);
 
 /**
- * This handler retrieves the images from the clipboard as a base64 string and returns it in a callback.
+ * image pasting into canvas
  *
- * @param pasteEvent
- * @param callback
+ * @param {string} canvas_id - canvas id
+ * @param {boolean} autoresize - if canvas will be resized
  */
-function retrieveImageFromClipboardAsBase64(pasteEvent, callback, imageFormat) {
-  if (pasteEvent.clipboardData == false) {
-    if (typeof callback == "function") {
-      callback(undefined);
-    }
-  }
+function CLIPBOARD_CLASS(canvas_id, autoresize) {
+  var _self = this;
+  var canvas = document.getElementById(canvas_id);
+  var ctx = document.getElementById(canvas_id).getContext("2d");
 
-  // retrive elements from clipboard
-  var items = pasteEvent.clipboardData.items;
+  //handlers
+  document.addEventListener(
+    "paste",
+    function (e) {
+      _self.paste_auto(e);
+    },
+    false
+  );
 
-  if (items == undefined) {
-    if (typeof callback == "function") {
-      callback(undefined);
-    }
-  }
-  // loop the elements
-  for (var i = 0; i < items.length; i++) {
-    // Skip content if not image
-    if (items[i].type.indexOf("image") == -1) continue;
-    // Retrieve image on clipboard as blob
-    var blob = items[i].getAsFile();
-
-    // Create an abstract canvas and get context
-    var mycanvas = document.createElement("canvas");
-    var ctx = mycanvas.getContext("2d");
-
-    // Create an image
-    var img = new Image();
-
-    // Once the image loads, render the img on the canvas
-    img.onload = function () {
-      // Update dimensions of the canvas with the dimensions of the image
-      mycanvas.width = this.width;
-      mycanvas.height = this.height;
-
-      // Draw the image
-      ctx.drawImage(img, 0, 0);
-
-      // Execute callback with the base64 URI of the image
-      if (typeof callback == "function") {
-        callback(mycanvas.toDataURL(imageFormat || "image/png"));
+  /* events fired on the drop targets */
+  document.addEventListener(
+    "dragover",
+    function (e) {
+      // prevent default to allow drop
+      e.preventDefault();
+    },
+    false
+  );
+  document.addEventListener("drop", function (e) {
+    // prevent default action (open as link for some elements)
+    // add event handler to canvas if desired instead of document
+    //debugger;
+    e.preventDefault();
+    var items = e.dataTransfer.items;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf("image") !== -1) {
+        document.getElementById("instructions").style.visibility = "hidden";
+        //image
+        var blob = items[i].getAsFile();
+        var URLObj = window.URL || window.webkitURL;
+        var source = URLObj.createObjectURL(blob);
+        _self.paste_createImage(source);
       }
+    }
+  });
+
+  //on paste
+  this.paste_auto = function (e) {
+    if (e.clipboardData) {
+      var items = e.clipboardData.items;
+      if (!items) return;
+
+      //access data directly
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") !== -1) {
+          //image
+          var blob = items[i].getAsFile();
+          var URLObj = window.URL || window.webkitURL;
+          var source = URLObj.createObjectURL(blob);
+          this.paste_createImage(source);
+        }
+      }
+      e.preventDefault();
+    }
+  };
+  //draw pasted image to canvas
+  this.paste_createImage = function (source) {
+    //debugger;
+    var pastedImage = new Image();
+    pastedImage.onload = function () {
+      if (autoresize == true) {
+        //resize
+        canvas.width = pastedImage.width;
+        canvas.height = pastedImage.height;
+      } else {
+        //clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      ctx.drawImage(pastedImage, 0, 0);
     };
-
-    // Crossbrowser support for URL
-    var URLObj = window.URL || window.webkitURL;
-
-    // Creates a DOMString containing a URL representing the object given in the parameter
-    // namely the original Blob
-    img.src = URLObj.createObjectURL(blob);
-  }
+    pastedImage.src = source;
+  };
 }
-window.addEventListener(
-  "paste",
-  function (e) {
-    // Handle the event
-    retrieveImageFromClipboardAsBase64(e, function (imageDataBase64) {
-      // If there's an image, open it in the browser as a new window :)
-      if (imageDataBase64) {
-        // data:image/png;base64,iVBORw0KGgoAAAAN......
-        window.open(imageDataBase64);
 
-        document.getElementById('image').setAttribute('src', imageDataBase64);
-      }
+// detect blank canvas: https://stackoverflow.com/a/17386803/177416
+function isCanvasBlank(canvas) {
+  var blank = document.createElement("canvas");
+  blank.width = canvas.width;
+  blank.height = canvas.height;
+
+  return canvas.toDataURL() === blank.toDataURL();
+}
+
+const { ipcRenderer } = require("electron");
+
+document.getElementById("saveButton").addEventListener("click", function () {
+  debugger;
+  var form = document.getElementById("myForm");
+  //if (form.valid()) {
+  var image = document.getElementById("my_canvas");
+  if (!isCanvasBlank(image)) {
+    var imageData = image.toDataURL("image/png");
+    imageData = imageData.replace("data:image/png;base64,", "");
+    document.getElementById("imageData").value = imageData;
+
+
+    ipcRenderer.send("image:iconize", {
+      imageBase64: imageData
     });
-  },
-  false
-);
+  } else {
+    // Pass null, otherwise the POST will submit { id = "imageData" } for this field.
+    document.getElementById("imageData").value = null;
+  }
+  //form.submit();
+  //}
+});
