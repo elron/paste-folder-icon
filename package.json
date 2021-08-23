@@ -1,0 +1,14 @@
+{
+  "name": "paste-folder-icon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.jsx",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "13.2.1"
+  }
+}
