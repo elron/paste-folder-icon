@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.jsx",
+  "type": "module",
   "scripts": {
     "start": "electron .",
     "build": "npm run package-win",
@@ -19,7 +20,6 @@
     "@fiahfy/ico": "^0.0.5",
     "clean-icon-and-thumb-cache": "^1.0.2",
     "electron-packager": "^15.3.0",
-    "fswin": "^3.21.107",
     "jimp": "^0.16.1",
     "path": "^0.12.7",
     "winattr": "^3.0.0"

@@ -1,0 +1,6 @@
+https://answers.microsoft.com/en-us/windows/forum/all/windows-10-picture-files-not-updating-thumbnails/2de9dc59-f330-49f4-a955-70715352407a
+
+You may delete the thumbcache_*.db files in the following folder
+(you can copy the following location in to the Search box directly)
+“%LocalAppData%\Microsoft\Windows\Explorer” to check if that helps.
+

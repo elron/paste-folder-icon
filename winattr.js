@@ -20,7 +20,8 @@ const path =
 //     console.log("error", err);
 //   }
 // });
-const path2 = `F:\\ePC\\Elron\\`;
+// const path2 = `C:\\Users\\elron\\Elron Apps C\\005 Folder Icon\\paste-folder-icon\\test\\alohaa`;
+const path2 = `C:\\Users\\elron\\Elron Apps C\\005 Folder Icon\\paste-folder-icon`;
 winattr.get(path2, (err, attrs) => {
   if (err == null) {
     console.log(attrs);
