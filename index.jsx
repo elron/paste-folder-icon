@@ -2,7 +2,7 @@ const { BrowserWindow, app, ipcMain } = require("electron");
 const fs = require("fs");
 const { Ico, IcoImage } = require("@fiahfy/ico");
 const Jimp = require("jimp");
-const winattr = require("winattr");
+// const winattr = require("winattr");
 
 let mainWindow, exePath, folderPath;
 
@@ -55,7 +55,7 @@ ipcMain.on("image:iconize", async (e, data) => {
 
         if (folderPath) {
           // Set up the container folder
-          winattr.setSync(folderPath, { readonly: true, system: false });
+          // winattr.setSync(folderPath, { readonly: true, system: false });
 
 
           // Write .ico file
@@ -63,21 +63,22 @@ ipcMain.on("image:iconize", async (e, data) => {
           const iconFileName = `folderico-${timestamp}.ico`;
           fs.writeFileSync(`${folderPath}\\${iconFileName}`, ico.data);
           // Set attributes
-          winattr.setSync(`${folderPath}\\${iconFileName}`, {
-            archive: true,
-            hidden: true,
-            system: true,
-          });
+          // winattr.setSync(`${folderPath}\\${iconFileName}`, {
+          //   archive: true,
+          //   hidden: true,
+          //   system: true,
+          // });
 
           // Write desktop.ini
-          const desktopIniData = `[.ShellClassInfo]\n\rIconResource=${iconFileName},0`;
+          const desktopIniData = `[.ShellClassInfo]
+IconResource=${iconFileName},0`;
           fs.writeFileSync(`${folderPath}\\desktop.ini`, desktopIniData);
           // Set attributes
-          winattr.setSync(`${folderPath}\\desktop.ini`, {
-            archive: true,
-            hidden: true,
-            system: true,
-          });
+          // winattr.setSync(`${folderPath}\\desktop.ini`, {
+          //   archive: true,
+          //   hidden: true,
+          //   system: true,
+          // });
         }
       });
     })
