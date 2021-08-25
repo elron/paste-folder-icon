@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.jsx",
-  "type": "module",
   "scripts": {
     "start": "electron .",
+    "build": "npm run package-win",
     "icon": "node icon.js",
     "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --out=rlease-builds --version-string.CompanyName=CE --version-string.FireDescription=CE "
   },
@@ -17,7 +17,11 @@
   },
   "dependencies": {
     "@fiahfy/ico": "^0.0.5",
+    "clean-icon-and-thumb-cache": "^1.0.2",
     "electron-packager": "^15.3.0",
-    "jimp": "^0.16.1"
+    "fswin": "^3.21.107",
+    "jimp": "^0.16.1",
+    "path": "^0.12.7",
+    "winattr": "^3.0.0"
   }
 }

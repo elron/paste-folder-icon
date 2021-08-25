@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Paste Folder Icon</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <script src="./script.js" defer></script>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <h1>Paste your folder icon now!</h1>
@@ -39,6 +39,11 @@
         </button>
       </div>
       <input type="hidden" id="imageData" />
+
+      <div class="dev">
+        <p>EXE file Path is: <strong id="exePath"></strong></p>
+        <p>Initiating Folder Path is: <strong id="folderPath"></strong></p>
+      </div>
     </form>
   </body>
 </html>

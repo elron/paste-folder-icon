@@ -1,3 +1,6 @@
+const { ipcRenderer } = require("electron");
+
+
 var CLIPBOARD = new CLIPBOARD_CLASS("my_canvas", true);
 
 /**
@@ -94,8 +97,6 @@ function isCanvasBlank(canvas) {
   return canvas.toDataURL() === blank.toDataURL();
 }
 
-const { ipcRenderer } = require("electron");
-
 document.getElementById("saveButton").addEventListener("click", function () {
   debugger;
   var form = document.getElementById("myForm");
@@ -106,9 +107,8 @@ document.getElementById("saveButton").addEventListener("click", function () {
     imageData = imageData.replace("data:image/png;base64,", "");
     document.getElementById("imageData").value = imageData;
 
-
     ipcRenderer.send("image:iconize", {
-      imageBase64: imageData
+      imageBase64: imageData,
     });
   } else {
     // Pass null, otherwise the POST will submit { id = "imageData" } for this field.
@@ -116,4 +116,18 @@ document.getElementById("saveButton").addEventListener("click", function () {
   }
   //form.submit();
   //}
+});
+
+ipcRenderer.on("folder:path", (path, folderPath) => {
+  console.log("path", path);
+  console.log("folderPath", JSON.parse(folderPath));
+  console.log("folderPath", JSON.parse(folderPath));
+  alert(JSON.stringify(folderPath));
+});
+
+ipcRenderer.on("paths", (args, paths) => {
+  const { exePath, folderPath } = paths;
+  console.log("paths", paths);
+  document.getElementById("exePath").innerText = exePath;
+  document.getElementById("folderPath").innerText = folderPath;
 });

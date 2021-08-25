@@ -1,0 +1,4 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Folder\shell\Add Folder Icon\command]
+@="\"C:\\Users\\elron\\Elron Apps C\\005 Folder Icon\\paste-folder-icon\\rlease-builds\\Paste Folder Icon-win32-ia32\\Paste Folder Icon.exe\" \"%1\""
