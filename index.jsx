@@ -15,6 +15,7 @@ function createMainWindow() {
       nodeIntegration: true,
       contextIsolation: false,
     },
+    alwaysOnTop: true
   });
 
   mainWindow.loadFile(`${__dirname}/app/index.html`);
