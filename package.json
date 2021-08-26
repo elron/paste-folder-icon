@@ -6,8 +6,9 @@
   "main": "index.jsx",
   "type": "module",
   "scripts": {
-    "start": "electron .",
-    "build": "rm -r --force rlease-builds && npm run package-win",
+    "start": "npm run exeCompile && electron .",
+    "build": "npm run exeCompile && rm -r --force rlease-builds && npm run package-win",
+    "exeCompile": "g++ -o refresh-folder-icons refresh-folder-icons.cpp",
     "icon": "node icon.js",
     "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --out=rlease-builds --version-string.CompanyName=CE --version-string.FireDescription=CE "
   },

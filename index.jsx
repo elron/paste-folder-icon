@@ -15,7 +15,7 @@ function createMainWindow() {
       nodeIntegration: true,
       contextIsolation: false,
     },
-    alwaysOnTop: true
+    alwaysOnTop: true,
   });
 
   mainWindow.loadFile(`${__dirname}/app/index.html`);
@@ -55,6 +55,24 @@ ipcMain.on("image:iconize", async (e, data) => {
         ico.append(image);
 
         if (folderPath) {
+          // restart, remove old desktop.ini and old .ico
+          winattr.setSync(folderPath, { readonly: false, system: false });
+          try {
+            const desktopIniData = fs.readFileSync(
+              `${folderPath}\\desktop.ini`,
+              "utf8"
+            );
+            const oldIcoFile = desktopIniData.match(/IconResource=(.*)\,/)[1];
+            console.log("oldIcoFile", oldIcoFile);
+            fs.unlinkSync(oldIcoFile);
+          } catch (error) {}
+          try {
+            // fs.unlinkSync("desktop.ini");
+          } catch (error) {}
+          console.log("finished removing");
+
+          // setTimeout(() => {
+          console.log("new icon!");
           // Set up the container folder
           winattr.setSync(folderPath, { readonly: true, system: false });
 
@@ -92,6 +110,15 @@ ipcMain.on("image:iconize", async (e, data) => {
             hidden: true,
             system: true,
           });
+          console.log("done");
+
+          //myNodeFile.js
+          const { exec } = require("child_process");
+          exec("./refresh-folder-icons", (error, stdout, stderr) =>
+            console.log(stdout)
+          );
+          console.log('after execution');
+          // }, 5000);
         }
       });
     })
