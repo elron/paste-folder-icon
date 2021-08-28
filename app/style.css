@@ -51,18 +51,113 @@
 
 body {
   margin: 0;
-  /* direction: rtl; */
-  /* color: $text;
-    background-color: $bg; */
+  color: #050038;
   font-family: "FtMonopol", Arial, Helvetica, sans-serif;
-  /* font-size: 0.85em; */
-
-  /* @include media('>=tablet') {
-      font-size: 1em;
-    } */
+  border-top: 1px solid #eceefc;
 }
 
+#myForm {
+  padding: 2em 0;
+}
+
+.paste-now {
+  text-align: center;
+  font-size: 1.3em;
+  color: #3f53d8;
+  font-weight: 700;
+}
+
+.canvas-wrap {
+  width: 11em;
+  margin: 0 auto;
+  height: 11em;
+  position: relative;
+  border: 1px solid #99d1ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  padding-bottom: 3em;
+}
+#default-icon {
+  background-image: url("./images/default.png");
+  background-size: 70% auto;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* opacity: 0.5; */
+  position: absolute;
+  margin-left: 2%;
+  margin-top: 2%;
+  display: none;
+}
+.is-blank #default-icon {
+  display: block;
+}
+#folderName {
+  position: absolute;
+  bottom: 1em;
+  font-weight: 500;
+  /* color: black; */
+  width: 100%;
+  left: 0;
+  text-align: center;
+  display: block;
+}
+.instructions {
+  margin-top: 2em;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.85em;
+}
 canvas#my_canvas {
+  transition: all 300ms ease;
   max-width: 100%;
   height: auto;
+  max-height: 11em;
+  position: relative;
+}
+.is-loading 
+canvas#my_canvas {
+  opacity: 0.2;
+  transition: none;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinner-wrap {
+  will-change: opacity transform;
+  transition: all 300ms ease;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  opacity: 0;
+  transform: scale(0.7);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+.is-loading .spinner-wrap {
+  opacity: 1;
+  transform: scale(1);
+}
+.loading-spinner {
+  margin-top: -0.5em;
+  margin-left: -0.5em;
+  width: 1em;
+  height: 1em;
+  border-radius: 1em;
+  font-size: 4em;
+  display: inline-block;
+  border: 4px #3f53d8 solid;
+  box-sizing: border-box;
+  border-right-color: transparent;
+  animation: rotating 1s linear infinite;
 }

@@ -8,14 +8,16 @@ let mainWindow, exePath, folderPath;
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    title: "Paste Folder Icon",
+    title: "FolderIcon.io",
     width: 500,
-    height: 600,
+    height: 460,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
     alwaysOnTop: true,
+    autoHideMenuBar: true,
+    resizable: false,
   });
 
   mainWindow.loadFile(`${__dirname}/app/index.html`);
@@ -23,7 +25,8 @@ function createMainWindow() {
   mainWindow.webContents.on("did-finish-load", function () {
     exePath = process.argv[0];
     folderPath = process.argv[1];
-    mainWindow.webContents.send("paths", { exePath, folderPath });
+    folderName = folderPath.split('\\').reverse()[0];
+    mainWindow.webContents.send("paths", { exePath, folderPath, folderName });
   });
 }
 
@@ -118,6 +121,7 @@ ipcMain.on("image:iconize", async (e, data) => {
             console.log(stdout)
           );
           console.log('after execution');
+          mainWindow.webContents.send("loading:end");
           // }, 5000);
         }
       });

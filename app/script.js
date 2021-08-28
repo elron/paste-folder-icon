@@ -1,7 +1,8 @@
 const { ipcRenderer } = require("electron");
 
-
 var CLIPBOARD = new CLIPBOARD_CLASS("my_canvas", true);
+
+document.getElementById("myForm").classList.add('is-blank');
 
 /**
  * image pasting into canvas
@@ -40,7 +41,7 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
     var items = e.dataTransfer.items;
     for (var i = 0; i < items.length; i++) {
       if (items[i].type.indexOf("image") !== -1) {
-        document.getElementById("instructions").style.visibility = "hidden";
+        // document.getElementById("instructions").style.visibility = "hidden";
         //image
         var blob = items[i].getAsFile();
         var URLObj = window.URL || window.webkitURL;
@@ -71,6 +72,7 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
   };
   //draw pasted image to canvas
   this.paste_createImage = function (source) {
+    // document.getElementById("myForm").classList.add('is-blank');
     //debugger;
     var pastedImage = new Image();
     pastedImage.onload = function () {
@@ -83,6 +85,8 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
       ctx.drawImage(pastedImage, 0, 0);
+      replaceFolderIcon();
+      document.getElementById("myForm").classList.remove('is-blank');
     };
     pastedImage.src = source;
   };
@@ -97,12 +101,14 @@ function isCanvasBlank(canvas) {
   return canvas.toDataURL() === blank.toDataURL();
 }
 
-document.getElementById("saveButton").addEventListener("click", function () {
-  debugger;
+function replaceFolderIcon() {
+  // debugger;
   var form = document.getElementById("myForm");
   //if (form.valid()) {
   var image = document.getElementById("my_canvas");
   if (!isCanvasBlank(image)) {
+    console.log('starting1');
+    document.getElementById("myForm").classList.add('is-loading');
     var imageData = image.toDataURL("image/png");
     imageData = imageData.replace("data:image/png;base64,", "");
     document.getElementById("imageData").value = imageData;
@@ -111,12 +117,17 @@ document.getElementById("saveButton").addEventListener("click", function () {
       imageBase64: imageData,
     });
   } else {
+    console.log('canvas is blank');
     // Pass null, otherwise the POST will submit { id = "imageData" } for this field.
     document.getElementById("imageData").value = null;
   }
   //form.submit();
   //}
-});
+}
+
+// document.getElementById("saveButton").addEventListener("click", function () {
+//   replaceFolderIcon();
+// });
 
 ipcRenderer.on("folder:path", (path, folderPath) => {
   console.log("path", path);
@@ -126,8 +137,17 @@ ipcRenderer.on("folder:path", (path, folderPath) => {
 });
 
 ipcRenderer.on("paths", (args, paths) => {
-  const { exePath, folderPath } = paths;
+  const { exePath, folderPath, folderName } = paths;
   console.log("paths", paths);
-  document.getElementById("exePath").innerText = exePath;
-  document.getElementById("folderPath").innerText = folderPath;
+  // document.getElementById("exePath").innerText = exePath;
+  // document.getElementById("folderPath").innerText = folderPath;
+  document.getElementById("folderName").innerText =
+    folderName !== "." ? folderName : "[Folder Name]";
+});
+
+
+ipcRenderer.on("loading:end", (args, data) => {
+  setTimeout(() => {
+    document.getElementById("myForm").classList.remove('is-loading');
+  }, 1000);
 });
