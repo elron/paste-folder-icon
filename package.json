@@ -6,6 +6,7 @@
   "main": "index.jsx",
   "type": "module",
   "scripts": {
+    "refresh": "node refresh.js",
     "start": "npm run exeCompile && electron .",
     "build": "npm run exeCompile && rm -r --force rlease-builds && npm run package-win",
     "exeCompile": "g++ -o refresh-folder-icons refresh-folder-icons.cpp",

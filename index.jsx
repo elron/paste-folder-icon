@@ -25,9 +25,18 @@ function createMainWindow() {
   mainWindow.webContents.on("did-finish-load", function () {
     exePath = process.argv[0];
     folderPath = process.argv[1];
-    folderName = folderPath.split('\\').reverse()[0];
+    folderName = folderPath.split("\\").reverse()[0];
     mainWindow.webContents.send("paths", { exePath, folderPath, folderName });
+
+    getCurrentFavicon();
   });
+}
+
+function getCurrentFavicon() {
+  console.log("folderPath", folderPath + "/desktop.ini");
+  console.log("exePath", exePath);
+
+  // mainWindow.webContents.send("favicon", folderPath);
 }
 
 app.on("open-file", (e, path) => {
@@ -68,59 +77,67 @@ ipcMain.on("image:iconize", async (e, data) => {
             const oldIcoFile = desktopIniData.match(/IconResource=(.*)\,/)[1];
             console.log("oldIcoFile", oldIcoFile);
             fs.unlinkSync(oldIcoFile);
+            console.log("finished removing old icon");
           } catch (error) {}
           try {
-            // fs.unlinkSync("desktop.ini");
+            fs.unlinkSync("desktop.ini");
+            console.log("finished removing desktop.ini");
           } catch (error) {}
-          console.log("finished removing");
 
           // setTimeout(() => {
           console.log("new icon!");
           // Set up the container folder
-          winattr.setSync(folderPath, { readonly: true, system: false });
+          winattr.setSync(folderPath, { readonly: true });
+          console.log("done sync folderpath");
 
           // Write .ico file
           const timestamp = Math.floor(Date.now() / 1000);
-          const iconFileName = `folderico-${timestamp}.ico`;
-          try {
-            winattr.setSync(`${folderPath}\\${iconFileName}`, {
-              archive: false,
-              hidden: false,
-              system: false,
-            });
-          } catch (error) {}
+          const iconFileName = `foldericon-${timestamp}.ico`;
           fs.writeFileSync(`${folderPath}\\${iconFileName}`, ico.data);
+          console.log("done sync icon");
           // Set attributes
           winattr.setSync(`${folderPath}\\${iconFileName}`, {
-            archive: true,
+            archive: false,
             hidden: true,
             system: true,
           });
+          console.log("done sync icon properties");
 
           // Write desktop.ini
           const desktopIniData = `[.ShellClassInfo]\n\rIconResource=${iconFileName},0`;
           try {
-            winattr.setSync(`${folderPath}\\desktop.ini`, {
-              archive: false,
-              hidden: false,
-              system: false,
-            });
-          } catch (error) {}
-          fs.writeFileSync(`${folderPath}\\desktop.ini`, desktopIniData);
+            fs.writeFileSync(`${folderPath}\\desktop.ini`, desktopIniData);
+          } catch (error) {
+            console.log(error);
+          }
+          console.log("done sync desktop.ini");
+          // Set attributes
           // Set attributes
           winattr.setSync(`${folderPath}\\desktop.ini`, {
-            archive: true,
+            archive: false,
             hidden: true,
             system: true,
           });
           console.log("done");
 
-          //myNodeFile.js
+          const absoluteFolderPath =
+            folderPath === "."
+              ? `C:\\Users\\elron\\Elron Apps C\\005 Folder Icon`
+              : folderPath;
+
           const { exec } = require("child_process");
-          exec("./refresh-folder-icons", (error, stdout, stderr) =>
-            console.log(stdout)
-          );
-          console.log('after execution');
+          exec(`"./FolderIco/FolderIco"  --folder "${absoluteFolderPath}" --repair --recursively`, (err, stdout, stderr) => {
+            if (err) {
+              // node couldn't execute the command
+              return;
+            }
+
+            // the *entire* stdout and stderr (buffered)
+            console.log(`stdout: ${stdout}`);
+            console.log(`stderr: ${stderr}`);
+          });
+
+          console.log("after execution");
           mainWindow.webContents.send("loading:end");
           // }, 5000);
         }
