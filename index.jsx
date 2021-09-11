@@ -34,6 +34,9 @@ function createMainWindow() {
   });
 }
 
+app.on("ready", createMainWindow);
+
+
 function getCurrentFavicon() {
   const desktopIniPath = path.join(folderPath, "/desktop.ini");
 
@@ -46,12 +49,6 @@ function getCurrentFavicon() {
   mainWindow.webContents.send("currenticon:get", buffer);
 }
 
-app.on("open-file", (e, path) => {
-  console.log("path", path);
-  mainWindow.webContents.send("folder:path", path);
-});
-
-app.on("ready", createMainWindow);
 
 function getIconFileNameFromDesktopIniPath(path) {
   const desktopIniData = fs.readFileSync(path, "utf8");
@@ -96,7 +93,6 @@ ipcMain.on("image:iconize", async (e, data) => {
             console.log("finished removing desktop.ini");
           } catch (error) {}
 
-          // setTimeout(() => {
           console.log("new icon!");
           // Set up the container folder
           winattr.setSync(folderPath, { readonly: true });
@@ -154,7 +150,6 @@ ipcMain.on("image:iconize", async (e, data) => {
 
           console.log("after execution");
           mainWindow.webContents.send("loading:end");
-          // }, 5000);
         }
       });
     })

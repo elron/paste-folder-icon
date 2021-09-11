@@ -135,20 +135,7 @@ function replaceFolderIcon() {
     // Pass null, otherwise the POST will submit { id = "imageData" } for this field.
     document.getElementById("imageData").value = null;
   }
-  //form.submit();
-  //}
 }
-
-// document.getElementById("saveButton").addEventListener("click", function () {
-//   replaceFolderIcon();
-// });
-
-ipcRenderer.on("folder:path", (path, folderPath) => {
-  console.log("path", path);
-  console.log("folderPath", JSON.parse(folderPath));
-  console.log("folderPath", JSON.parse(folderPath));
-  alert(JSON.stringify(folderPath));
-});
 ipcRenderer.on("currenticon:get", (path, rawdata) => {
   console.log("path", path);
   console.log("rawdata", rawdata);
@@ -160,15 +147,11 @@ ipcRenderer.on("currenticon:get", (path, rawdata) => {
   var source = URLObj.createObjectURL(blob);
 
   CLIPBOARD.paste_createImage(source, false);
-
-  // alert(JSON.stringify(rawdata));
 });
 
 ipcRenderer.on("paths", (args, paths) => {
   const { exePath, folderPath, folderName } = paths;
   console.log("paths", paths);
-  // document.getElementById("exePath").innerText = exePath;
-  // document.getElementById("folderPath").innerText = folderPath;
   document.getElementById("folderName").innerText =
     folderName !== "." ? folderName : "[Folder Name]";
 });
@@ -185,8 +168,6 @@ ipcRenderer.on("loading:end", (args, data) => {
 
     setInterval(() => {
       if (closeIn <= 1000) window.close();
-      // document.getElementsByClassName("title-dothis")[0].style.display = "none";
-      // document.getElementsByClassName("title-done")[0].style.display = "block";
       closeIn = closeIn - 1000;
       document.getElementsByClassName("closing-in")[0].innerText = closeIn / 1000;
     }, 1000);
