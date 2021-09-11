@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -19,7 +19,13 @@
       </svg>
     </div>
     <form id="myForm">
-      <h1 class="paste-now">Paste/Drop your new folder icon now</h1>
+      <!-- <h1 class="paste-now">Paste/Drop your new folder icon now</h1> -->
+      <h1 class="paste-now">
+        <span class="title-dothis">הדביקו/גררו לכאן אייקון חדש לתיקיה</span>
+        <span class="title-done" style="display: none;">סיימנו!</span>
+        <!-- אייקון התיקיה שלכם -->
+      </h1>
+      <div class="closing-in-wrap">(האייקון התעדכן – סוגר חלון בעוד <span class="closing-in"></span> שניות)</div>
 
       <!-- <div id="instructions">
         Method 1:<br />
@@ -51,8 +57,12 @@
       <input type="hidden" id="imageData" />
 
       <p class="instructions">
-        Copy+Paste an image here, Drag a photo to this window,<br />
-        or click here to select a picture from your PC
+        <!-- Copy+Paste an image here, Drag a photo to this window,<br />
+        or click here to select a picture from your PC -->
+        <!-- העתק תמונה והדבק כאן<br />
+        או גרור לחלון  -->
+        העתיקו והדביקו לכאן תמונה<br />
+        או שתגררו אותה לחלון הזה
       </p>
       <!-- 
       <div class="dev">

@@ -61,7 +61,22 @@ body {
 #myForm {
   padding: 2em 0;
 }
+.closing-in-wrap {
+  text-align: center;
+  height: 1.3em;
 
+  position: relative;
+  top: -0.7em;
+  font-size: 0.85em;
+  /* color: #3f53d8; */
+  font-weight: 600;
+  transition: 200ms ease opacity;
+  opacity: 0;
+}
+.closing-in {
+  width: 0.9em;
+  display: inline-block;
+}
 .paste-now {
   text-align: center;
   font-size: 1.3em;

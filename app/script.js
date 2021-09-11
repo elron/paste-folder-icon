@@ -99,7 +99,7 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
       }
       ctx.drawImage(pastedImage, 0, 0);
 
-      if(replace) replaceFolderIcon();
+      if (replace) replaceFolderIcon();
       document.getElementById("myForm").classList.remove("is-blank");
     };
     pastedImage.src = source;
@@ -152,10 +152,10 @@ ipcRenderer.on("folder:path", (path, folderPath) => {
 ipcRenderer.on("currenticon:get", (path, rawdata) => {
   console.log("path", path);
   console.log("rawdata", rawdata);
-  
+
   const blob = new Blob([rawdata]);
   console.log("blob", blob);
-  
+
   var URLObj = window.URL || window.webkitURL;
   var source = URLObj.createObjectURL(blob);
 
@@ -176,6 +176,20 @@ ipcRenderer.on("paths", (args, paths) => {
 ipcRenderer.on("loading:end", (args, data) => {
   setTimeout(() => {
     document.getElementById("myForm").classList.remove("is-loading");
+    // document.getElementsByClassName("title-dothis")[0].style.display = "none";
+    // document.getElementsByClassName("title-done")[0].style.display = "block";
+    document.getElementsByClassName("closing-in-wrap")[0].style.opacity = "1";
+
+    let closeIn = 3000;
+    document.getElementsByClassName("closing-in")[0].innerText = closeIn / 1000;
+
+    setInterval(() => {
+      if (closeIn <= 1000) window.close();
+      // document.getElementsByClassName("title-dothis")[0].style.display = "none";
+      // document.getElementsByClassName("title-done")[0].style.display = "block";
+      closeIn = closeIn - 1000;
+      document.getElementsByClassName("closing-in")[0].innerText = closeIn / 1000;
+    }, 1000);
   }, 1000);
 });
 
@@ -185,18 +199,18 @@ console.log("html", html);
 console.log("body", body);
 
 document.addEventListener("dragenter", () => {
-  console.log('dragenter');
+  console.log("dragenter");
   body.classList.add("is-dragging");
 });
 document.addEventListener("dragover", () => {
-  console.log('dragover');
+  console.log("dragover");
   body.classList.add("is-dragging");
 });
 document.addEventListener("dragleave", () => {
-  console.log('dragleave');
+  console.log("dragleave");
   body.classList.remove("is-dragging");
 });
 document.addEventListener("drop", () => {
-  console.log('drop');
+  console.log("drop");
   body.classList.remove("is-dragging");
 });

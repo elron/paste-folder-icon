@@ -10,7 +10,7 @@ let mainWindow, exePath, folderPath;
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: "FolderIcon.io",
-    width: 500,
+    width: 470,
     height: 480,
     webPreferences: {
       nodeIntegration: true,
