@@ -1,0 +1,1 @@
+cmd /k "C:\Program Files\FolderIco\FolderIco.exe"  --folder "C:\Users\elron\Elron Apps C\005 Folder Icon" --repair --recursively

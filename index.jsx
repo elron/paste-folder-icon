@@ -3,6 +3,7 @@ const fs = require("fs");
 const { Ico, IcoImage } = require("@fiahfy/ico");
 const Jimp = require("jimp");
 const winattr = require("winattr");
+const path = require("path");
 
 let mainWindow, exePath, folderPath;
 
@@ -76,11 +77,11 @@ ipcMain.on("image:iconize", async (e, data) => {
             );
             const oldIcoFile = desktopIniData.match(/IconResource=(.*)\,/)[1];
             console.log("oldIcoFile", oldIcoFile);
-            fs.unlinkSync(oldIcoFile);
+            fs.unlinkSync(`${folderPath}\\${oldIcoFile}`);
             console.log("finished removing old icon");
           } catch (error) {}
           try {
-            fs.unlinkSync("desktop.ini");
+            fs.unlinkSync(`${folderPath}\\desktop.ini`);
             console.log("finished removing desktop.ini");
           } catch (error) {}
 
@@ -121,21 +122,24 @@ ipcMain.on("image:iconize", async (e, data) => {
           console.log("done");
 
           const absoluteFolderPath =
-            folderPath === "."
-              ? `C:\\Users\\elron\\Elron Apps C\\005 Folder Icon`
-              : folderPath;
+            folderPath === "." ? __dirname : folderPath;
 
           const { exec } = require("child_process");
-          exec(`"./FolderIco/FolderIco"  --folder "${absoluteFolderPath}" --repair --recursively`, (err, stdout, stderr) => {
-            if (err) {
-              // node couldn't execute the command
-              return;
-            }
+          const refreshExePath = path.join(__dirname, "FolderIco", "FolderIco");
+          console.log("exe", refreshExePath);
+          exec(
+            `"${refreshExePath}"  --folder "${absoluteFolderPath}" --repair --recursively`,
+            (err, stdout, stderr) => {
+              if (err) {
+                // node couldn't execute the command
+                return;
+              }
 
-            // the *entire* stdout and stderr (buffered)
-            console.log(`stdout: ${stdout}`);
-            console.log(`stderr: ${stderr}`);
-          });
+              // the *entire* stdout and stderr (buffered)
+              console.log(`stdout: ${stdout}`);
+              console.log(`stderr: ${stderr}`);
+            }
+          );
 
           console.log("after execution");
           mainWindow.webContents.send("loading:end");

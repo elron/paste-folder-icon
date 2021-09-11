@@ -14,6 +14,7 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
   var _self = this;
   var canvas = document.getElementById(canvas_id);
   var ctx = document.getElementById(canvas_id).getContext("2d");
+  ctx.fillStyle = "blue";
 
   //handlers
   document.addEventListener(
@@ -64,6 +65,16 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
           var blob = items[i].getAsFile();
           var URLObj = window.URL || window.webkitURL;
           var source = URLObj.createObjectURL(blob);
+
+
+          let reader = new FileReader();
+          reader.readAsDataURL(blob); // converts the blob to base64 and calls onload  
+          reader.onload = function() {
+            document.getElementById('img').setAttribute('src', `${reader.result}`)
+          };
+
+
+
           this.paste_createImage(source);
         }
       }
@@ -72,8 +83,10 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
   };
   //draw pasted image to canvas
   this.paste_createImage = function (source) {
+    console.log('source', source);
     // document.getElementById("myForm").classList.add('is-blank');
     //debugger;
+
     var pastedImage = new Image();
     pastedImage.onload = function () {
       if (autoresize == true) {
@@ -83,8 +96,10 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
       } else {
         //clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Turn transparency on
       }
       ctx.drawImage(pastedImage, 0, 0);
+      
       replaceFolderIcon();
       document.getElementById("myForm").classList.remove('is-blank');
     };

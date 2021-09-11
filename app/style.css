@@ -54,6 +54,7 @@ body {
   color: #050038;
   font-family: "FtMonopol", Arial, Helvetica, sans-serif;
   border-top: 1px solid #eceefc;
+  background: red;
 }
 
 #myForm {
