@@ -11,7 +11,7 @@ function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: "FolderIcon.io",
     width: 500,
-    height: 460,
+    height: 480,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -19,6 +19,7 @@ function createMainWindow() {
     alwaysOnTop: true,
     autoHideMenuBar: true,
     resizable: false,
+    icon: "./app/images/favicon/favicon4@512x.png",
   });
 
   mainWindow.loadFile(`${__dirname}/app/index.html`);
@@ -34,10 +35,15 @@ function createMainWindow() {
 }
 
 function getCurrentFavicon() {
-  console.log("folderPath", folderPath + "/desktop.ini");
-  console.log("exePath", exePath);
+  const desktopIniPath = path.join(folderPath, "/desktop.ini");
 
-  // mainWindow.webContents.send("favicon", folderPath);
+  const iconFileName = getIconFileNameFromDesktopIniPath(desktopIniPath);
+  const iconPath = path.join(folderPath, iconFileName);
+
+  console.log("iconPath", iconPath);
+
+  const buffer = fs.readFileSync(iconPath);
+  mainWindow.webContents.send("currenticon:get", buffer);
 }
 
 app.on("open-file", (e, path) => {
@@ -46,6 +52,13 @@ app.on("open-file", (e, path) => {
 });
 
 app.on("ready", createMainWindow);
+
+function getIconFileNameFromDesktopIniPath(path) {
+  const desktopIniData = fs.readFileSync(path, "utf8");
+  const iconFileName = desktopIniData.match(/IconResource=(.*)\,/)[1];
+  console.log("iconFileName", iconFileName);
+  return iconFileName;
+}
 
 ipcMain.on("image:iconize", async (e, data) => {
   const buf = Buffer.from(data.imageBase64, "base64");
@@ -71,12 +84,10 @@ ipcMain.on("image:iconize", async (e, data) => {
           // restart, remove old desktop.ini and old .ico
           winattr.setSync(folderPath, { readonly: false, system: false });
           try {
-            const desktopIniData = fs.readFileSync(
-              `${folderPath}\\desktop.ini`,
-              "utf8"
+            const oldIcoFile = getIconFileNameFromDesktopIniPath(
+              `${folderPath}\\desktop.ini`
             );
-            const oldIcoFile = desktopIniData.match(/IconResource=(.*)\,/)[1];
-            console.log("oldIcoFile", oldIcoFile);
+
             fs.unlinkSync(`${folderPath}\\${oldIcoFile}`);
             console.log("finished removing old icon");
           } catch (error) {}

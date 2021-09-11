@@ -54,7 +54,8 @@ body {
   color: #050038;
   font-family: "FtMonopol", Arial, Helvetica, sans-serif;
   border-top: 1px solid #eceefc;
-  background: red;
+  /* background: red; */
+  user-select: none;
 }
 
 #myForm {
@@ -119,8 +120,7 @@ canvas#my_canvas {
   max-height: 11em;
   position: relative;
 }
-.is-loading 
-canvas#my_canvas {
+.is-loading canvas#my_canvas {
   opacity: 0.2;
   transition: none;
 }
@@ -161,4 +161,55 @@ canvas#my_canvas {
   box-sizing: border-box;
   border-right-color: transparent;
   animation: rotating 1s linear infinite;
+}
+
+.is-dragging .dashed-wrap {
+  opacity: 1;
+}
+
+
+.dashed-wrap {
+  width: 100vw;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.7em;
+  box-sizing: border-box;
+  background-color: rgb(63, 83, 216, 0.1);
+  z-index: 999;
+  opacity: 0;
+  will-change: opacity;
+  pointer-events: none;
+  transition: 200ms ease opacity;
+}
+svg#dashed {
+  fill: transparent;
+  stroke: #3f53d8;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  /* -webkit-filter: blur(1.5em);
+  filter: blur(1.5em); */
+  pointer-events: none;
+  box-sizing: border-box;
+  paint-order: stroke;
+}
+
+svg#dashed rect {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  /* transition: all 180ms ease-out; */
+  stroke-linecap: round;
+  /* stroke-linejoin: round; */
+  /* stroke-width: 0.3em;
+  stroke-dasharray: 1.6em 2em; */
+  stroke-width: 1.5%;
+  stroke-dasharray: 4% 6%;
+  stroke-dashoffset: 2.3%;
+
+  /* animation: dash 12s linear forwards infinite; */
 }

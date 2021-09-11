@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>foldericon.io</title>
+    <title>FolderIcon.io</title>
     <meta
       http-equiv="Content-Security-Policy"
       content="script-src 'self' 'unsafe-inline';"
@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <div class="dashed-wrap">
+      <svg id="dashed" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <rect></rect>
+      </svg>
+    </div>
     <form id="myForm">
       <h1 class="paste-now">Paste/Drop your new folder icon now</h1>
 
@@ -35,7 +40,7 @@
         <span id="folderName"></span>
       </div>
 
-      <img src="" id="img" alt="">
+      <!-- <img src="" id="img" alt="" /> -->
       <!-- <button
         id="saveButton"
         type="button"

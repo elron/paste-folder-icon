@@ -7,8 +7,11 @@
   "type": "module",
   "scripts": {
     "refresh": "node refresh.js",
-    "start": "npm run exeCompile && electron .",
-    "build": "npm run exeCompile && rm -r --force rlease-builds && npm run package-win",
+    "start": "electron .",
+    "oldStart": "npm run exeCompile && electron .",
+    "buildOld": "npm run exeCompile && rm -r --force rlease-builds && npm run package-win",
+    "removeOldBuild": "rm -r --force rlease-builds",
+    "build": "npm run removeOldBuild && npm run package-win",
     "exeCompile": "g++ -o refresh-folder-icons refresh-folder-icons.cpp",
     "icon": "node icon.js",
     "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --out=rlease-builds --version-string.CompanyName=CE --version-string.FireDescription=CE "

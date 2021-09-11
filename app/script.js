@@ -2,7 +2,7 @@ const { ipcRenderer } = require("electron");
 
 var CLIPBOARD = new CLIPBOARD_CLASS("my_canvas", true);
 
-document.getElementById("myForm").classList.add('is-blank');
+document.getElementById("myForm").classList.add("is-blank");
 
 /**
  * image pasting into canvas
@@ -47,7 +47,7 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
         var blob = items[i].getAsFile();
         var URLObj = window.URL || window.webkitURL;
         var source = URLObj.createObjectURL(blob);
-        _self.paste_createImage(source);
+        _self.paste_createImage(source, true);
       }
     }
   });
@@ -66,14 +66,13 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
           var URLObj = window.URL || window.webkitURL;
           var source = URLObj.createObjectURL(blob);
 
-
-          let reader = new FileReader();
-          reader.readAsDataURL(blob); // converts the blob to base64 and calls onload  
-          reader.onload = function() {
-            document.getElementById('img').setAttribute('src', `${reader.result}`)
-          };
-
-
+          // let reader = new FileReader();
+          // reader.readAsDataURL(blob); // converts the blob to base64 and calls onload
+          // reader.onload = function () {
+          //   document
+          //     .getElementById("img")
+          //     .setAttribute("src", `${reader.result}`);
+          // };
 
           this.paste_createImage(source);
         }
@@ -82,8 +81,8 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
     }
   };
   //draw pasted image to canvas
-  this.paste_createImage = function (source) {
-    console.log('source', source);
+  this.paste_createImage = function (source, replace) {
+    console.log("source", source);
     // document.getElementById("myForm").classList.add('is-blank');
     //debugger;
 
@@ -99,9 +98,9 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
         // Turn transparency on
       }
       ctx.drawImage(pastedImage, 0, 0);
-      
-      replaceFolderIcon();
-      document.getElementById("myForm").classList.remove('is-blank');
+
+      if(replace) replaceFolderIcon();
+      document.getElementById("myForm").classList.remove("is-blank");
     };
     pastedImage.src = source;
   };
@@ -122,8 +121,8 @@ function replaceFolderIcon() {
   //if (form.valid()) {
   var image = document.getElementById("my_canvas");
   if (!isCanvasBlank(image)) {
-    console.log('starting1');
-    document.getElementById("myForm").classList.add('is-loading');
+    console.log("starting1");
+    document.getElementById("myForm").classList.add("is-loading");
     var imageData = image.toDataURL("image/png");
     imageData = imageData.replace("data:image/png;base64,", "");
     document.getElementById("imageData").value = imageData;
@@ -132,7 +131,7 @@ function replaceFolderIcon() {
       imageBase64: imageData,
     });
   } else {
-    console.log('canvas is blank');
+    console.log("canvas is blank");
     // Pass null, otherwise the POST will submit { id = "imageData" } for this field.
     document.getElementById("imageData").value = null;
   }
@@ -150,6 +149,20 @@ ipcRenderer.on("folder:path", (path, folderPath) => {
   console.log("folderPath", JSON.parse(folderPath));
   alert(JSON.stringify(folderPath));
 });
+ipcRenderer.on("currenticon:get", (path, rawdata) => {
+  console.log("path", path);
+  console.log("rawdata", rawdata);
+  
+  const blob = new Blob([rawdata]);
+  console.log("blob", blob);
+  
+  var URLObj = window.URL || window.webkitURL;
+  var source = URLObj.createObjectURL(blob);
+
+  CLIPBOARD.paste_createImage(source, false);
+
+  // alert(JSON.stringify(rawdata));
+});
 
 ipcRenderer.on("paths", (args, paths) => {
   const { exePath, folderPath, folderName } = paths;
@@ -160,9 +173,30 @@ ipcRenderer.on("paths", (args, paths) => {
     folderName !== "." ? folderName : "[Folder Name]";
 });
 
-
 ipcRenderer.on("loading:end", (args, data) => {
   setTimeout(() => {
-    document.getElementById("myForm").classList.remove('is-loading');
+    document.getElementById("myForm").classList.remove("is-loading");
   }, 1000);
+});
+
+const html = document.getElementsByTagName("html")[0];
+const body = document.getElementsByTagName("body")[0];
+console.log("html", html);
+console.log("body", body);
+
+document.addEventListener("dragenter", () => {
+  console.log('dragenter');
+  body.classList.add("is-dragging");
+});
+document.addEventListener("dragover", () => {
+  console.log('dragover');
+  body.classList.add("is-dragging");
+});
+document.addEventListener("dragleave", () => {
+  console.log('dragleave');
+  body.classList.remove("is-dragging");
+});
+document.addEventListener("drop", () => {
+  console.log('drop');
+  body.classList.remove("is-dragging");
 });
