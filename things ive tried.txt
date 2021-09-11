@@ -1,0 +1,9 @@
+https://www.folderico.com/what-if-custom-folder-icon-does-not-show.html
+
+how I know the command
+"C:\Program Files\FolderIco\FolderIco.exe"  --folder "C:\Users\elron\Elron Apps C\005 Folder Icon" --repair --recursively
+is thanks to "ProcessMonitor" software
+1. open the software and run
+2. change folder icon in FolderIco software
+3. search for "folderico" application
+4. inside one of the events, the command occoured. thanks ProcessMonitor!
