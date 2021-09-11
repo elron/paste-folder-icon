@@ -22,6 +22,7 @@ function createMainWindow() {
     icon: "./app/images/favicon/favicon4@512x.png",
   });
 
+  // mainWindow.loadURL(`https://hafonton.co.il/`);
   mainWindow.loadFile(`${__dirname}/app/index.html`);
 
   mainWindow.webContents.on("did-finish-load", function () {
@@ -132,7 +133,7 @@ ipcMain.on("image:iconize", async (e, data) => {
             folderPath === "." ? __dirname : folderPath;
 
           const { exec } = require("child_process");
-          const refreshExePath = path.join(__dirname, "FolderIco", "FolderIco");
+          const refreshExePath = path.join(__dirname, "app", "FolderIco", "FolderIco");
           console.log("exe", refreshExePath);
           exec(
             `"${refreshExePath}"  --folder "${absoluteFolderPath}" --repair --recursively`,
